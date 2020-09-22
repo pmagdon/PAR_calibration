@@ -1,0 +1,189 @@
+\documentclass[oneside]{report}
+
+\usepackage[margin=2cm,nohead]{geometry}
+\usepackage[pdftex]{graphicx}
+\usepackage{subfig}
+\usepackage{float}
+\usepackage{verbatim}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  pdfauthor={pmagdon}
+  }
+
+\graphicspath{{./graphs/}}
+
+
+\title{Calibration Report for AWF PAR Sensors}
+\author{Paul Magdon}
+\date{\today}
+\raggedbottom
+\setcounter{tocdepth}{1}
+
+\begin{document}
+
+\maketitle
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth,angle=-90]{graphs/sensor.jpg}
+	\caption{Custom made PAR Sensor}
+\end{figure}
+
+\section*{Background}
+For the next phase of the Biodiversity-Exploratories research project all climate stations on the experimental  plots will be equipped with Photosynthetic Active Radiation (PAR) sensors. As the commercially available sensors (e.g. LiCOR LI-190) are quite expensive, we are looking for an alternative. Therefore, we build PAR sensors @ AWF based on a prototype developed and tested by MPI Jena. The calibration of the PAR sensors as presented here had two objectives i) to test the variation between copies of the custom made PAR sensor (PAR-AWF), and ii) to compare the measurement to a calibrated reference.
+
+\section*{Method}
+The caluculation of the calibration factors is based on the aggregated 5 Minutes intervalls. We removed the first and last 30 minutes of the time series to avoid disturbances during the set-up of the devices. The calibration coefficients are calculated as the slope of the linear regression model with no intercept. For the analysis and fitting of the linear models all values $\le0.1$ mV were removed as we assume that this is below the sensitivity of the data logger.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{graphs/Installation.JPG}
+	\caption{Calibration setup of Sensors}
+\end{figure}
+
+<%library(xts);library(lubridate);library(ggplot2);library(reshape);library(scales);library(xtable);library(plyr);library(xlsx)%>
+<%source('src/PARcalibration_functions.R')%>
+
+%Import data
+<%file_1='data/PAR_Table_1_charge.dat'%>
+<%file_2='data/PAR_Table_2_charge.dat'%>
+<%file_3='data/PAR_Table_3_charge.dat'%>
+<%file_4='data/PAR_Table_4_charge.dat'%>
+<%file_5='data/PAR_Table_5_charge.dat'%>
+<%file_6='data/PAR_Table_6_charge.dat'%>
+<%raw_records.1<-data_import(file_1)%>
+<%raw_records.2<-data_import(file_2)%>
+<%raw_records.3<-data_import(file_3)%>
+<%raw_records.4<-data_import(file_4)%>
+<%raw_records.5<-data_import(file_5)%>
+<%raw_records.6<-data_import(file_6)%>
+
+% Add two hours as the logger clock was wrong
+<%index(raw_records.6)<-index(raw_records.6)+120*60%>
+% Define the reference
+<%data.1<-data_preparation(raw_records.1,reference=c('Licor.1.','Licor.2.'))%>
+<%data.2<-data_preparation(raw_records.2,reference=c('PAR_1.1.','PAR_1.2.'))%>
+<%data.3<-data_preparation(raw_records.3,reference=c('PAR_Licor _1','PAR_Licor_2'))%>
+<%data.4<-data_preparation(raw_records.4,reference=c('PAR_Licor _1','PAR_Licor_2'))%>
+<%data.5<-data_preparation(raw_records.5,reference=c('PAR_Licor_1','PAR_Licor_2'))%>
+<%data.6<-data_preparation(raw_records.6,reference=c('PAR_Licor_1','PAR_Licor_2'))%>
+% Remove additional columns
+<%data.1<-data.1[,-which(colnames(data.1)=='RECORD')]%>
+<%data.2<-data.2[,-which(colnames(data.2)=='RECORD')]%>
+<%data.3<-data.3[,-which(colnames(data.3)=='RECORD')]%>
+<%data.4<-data.4[,-which(colnames(data.4)=='RECORD')]%>
+<%data.5<-data.5[,-which(colnames(data.5)=='RECORD')]%>
+<%data.6<-data.6[,-which(colnames(data.6)=='RECORD')]%>
+
+% Remove columns where no sensor was connect to the logger from the log file
+<%data.5<-data.5[,-which(colnames(data.5)%in%c('PAR_mV_1.29.','PAR_mV_1.30.','PAR_mV_1.31.'))]%>
+
+%Set sensor_ids
+<%sensors.1<-read.xlsx("data/PAR_calibration_protkoll.xlsx", sheetName = "SensorIDs_1_charge")%>
+<%sensors.2<-read.xlsx("data/PAR_calibration_protkoll.xlsx", sheetName = "SensorIDs_2_charge")%>
+<%sensors.2<-sensors.2[,-which(sensors.2$Sensor_ID %in% c("AWF_PAR_045","AWF_PAR_046"))]%>
+
+<%sensors.3<-read.xlsx("data/PAR_calibration_protkoll.xlsx", sheetName = "SensorIDs_3_charge")%>
+<%sensors.3<-sensors.3[,-which(sensors.3$Sensor_ID %in% c("AWF_PAR_064"))]%>
+<%sensors.4<-read.xlsx("data/PAR_calibration_protkoll.xlsx", sheetName = "SensorIDs_4_charge")%>
+<%sensors.5<-read.xlsx("data/PAR_calibration_protkoll.xlsx", sheetName = "SensorIDs_5_charge")%>
+<%sensors.6<-read.xlsx("data/PAR_calibration_protkoll.xlsx", sheetName = "SensorIDs_6_charge")%>
+
+<%colnames(data.1)<-sensors.1[match(colnames(data.1),sensors.1$ColName),'Sensor_ID']%>
+<%colnames(data.2)<-sensors.2[match(colnames(data.2),sensors.2$ColName),'Sensor_ID']%>
+<%colnames(data.3)<-sensors.3[match(colnames(data.3),sensors.3$ColName),'Sensor_ID']%>
+<%colnames(data.4)<-sensors.4[match(colnames(data.4),sensors.4$ColName),'Sensor_ID']%>
+<%colnames(data.5)<-sensors.5[match(colnames(data.5),sensors.5$ColName),'Sensor_ID']%>
+<%colnames(data.6)<-sensors.6[match(colnames(data.6),sensors.6$ColName),'Sensor_ID']%>
+
+% Set timestamps
+<%data.1$timestamp<-rownames(data.1)%>
+<%data.2$timestamp<-rownames(data.2)%>
+
+%Remove two sensors which were not correctly connected
+<%data.2<-data.2[,-which(colnames(data.2)%in%c("AWF_PAR_045","AWF_PAR_046"))]%>
+<%data.3$timestamp<-rownames(data.3)%>
+<%data.3<-data.3[,-which(colnames(data.3)%in%c("AWF_PAR_064"))]%>
+
+<%data.4$timestamp<-rownames(data.4)%>
+<%data.5$timestamp<-rownames(data.5)%>
+<%data.6$timestamp<-rownames(data.6)%>
+
+% Combine all log files
+<%data<-rbind.fill(data.1,data.2,data.3,data.4,data.5,data.6)%>
+% Set teh refernce by averaging the two Licor sensors
+
+<%data$reference<-rowMeans(subset(data, select = c('Licor.1', 'Licor.2')), na.rm = TRUE)%>
+% Create list with all sensor_ids
+<%sensor_ids<-c(as.character(sensors.1$Sensor_ID),as.character(sensors.2$Sensor_ID),as.character(sensors.3$Sensor_ID),as.character(sensors.4$Sensor_ID),as.character(sensors.5$Sensor_ID),as.character(sensors.6$Sensor_ID))%>
+<%sensor_ids<-sensor_ids[-which(sensor_ids%in%c('Licor.1','Licor.2'))]%>
+<%sensor_ids<-sort(sensor_ids)%>
+<%results<-list()%>
+<%sensor_ids<-sensor_ids[1:2]%>
+% Start calculation and report compilation for each sensor
+<%for (i in sensor_ids) { -%>
+\pagebreak
+<%sensor_id=i%>
+% Remove values smaller then 0.1
+<%sub<-data[which(data[,sensor_id]>0.1),]%>
+\begin{center}
+\large{\textbf{SENSOR:<%= unlist(strsplit(sensor_id,'_'))[3]%>}}\\
+\end{center}
+
+\hrulefill\\
+CALIBRATION DATASET:\\
+\begin{table}[h!]
+  \centering
+  \label{tab:table1}
+  \begin{tabular}{ll}
+    Location: & Aboretum Goettingen\\ 
+    <%start=range(as.POSIXct(sub$timestamp))[1]%>
+    <%end=range(as.POSIXct(sub$timestamp))[2]%>
+    Start:  & <%= format(start, "%b %d %X %Y") %> \\
+    End:   & <%=  format(end, "%b %d %X %Y") %>\\ 
+    Duration: & <%= round(difftime(end,start,units='hours')) %> h\\
+    Measurement frequency: & 0.3hz\\
+    Averaging:  &5 min\\
+    Number of records: & <%= nrow(sub)%> \\
+    References: & LiCOR Q52953, Li-COR Q 52953 \\
+  \end{tabular}
+\end{table}
+
+\hrulefill\\
+CALIBRATION RESULTS:\\
+% Define a linear model with the reference as dependent variable and no intersect
+<% model <- lm(as.formula(paste('reference~0+',i)) ,data=sub)%>
+<% results[[i]]<-model %>
+\begin{center}
+\textbf{\large{Calibration Factor: <%=round(coefficients(model)[1],3)%>}}\\
+\end{center}
+<% print(xtable(model)) %>
+
+
+\hrulefill\\
+QUALITY REPORT:\\
+Residual standard error: <%= round(summary(model)$sigma,2) %> PPFD\\
+Adjusted R-squared: <%= round(summary(model)$r.squared,3)%>
+<%scatplot<-scat_plot(sub,i)%>
+<%ggsave(filename("_scatter",i), plot=scatplot, dpi = 100,width = 10, height = 10, units = "cm")%>
+
+\begin{figure}[H]
+  \centering
+  <%= include_graph(width = 0.4, filename("_scatter",i)) %>
+\end{figure}
+
+<%predplot<-pred_plot(sub,i, coefficients(model)[1])%>
+<%ggsave(filename("_pred",i), plot=predplot, dpi = 100,width = 15, height = 5, units = "cm")%>
+
+\begin{figure}[H]
+  \centering
+  <%= include_graph(width = 0.7, filename("_pred",i)) %>
+\end{figure}
+
+<% }
+save(results,file='results.Rdata')
+-%>
+
+\end{document}

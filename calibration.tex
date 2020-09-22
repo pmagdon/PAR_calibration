@@ -1,0 +1,267 @@
+\documentclass[oneside]{report}
+
+\usepackage[margin=2cm,nohead]{geometry}
+\usepackage[pdftex]{graphicx}
+\usepackage{subfig}
+\usepackage{float}
+\usepackage{verbatim}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  pdfauthor={pmagdon}
+  }
+
+\graphicspath{{./graphs/}}
+
+
+\title{Calibration Report for AWF PAR Sensors}
+\author{Paul Magdon}
+\date{\today}
+\raggedbottom
+\setcounter{tocdepth}{1}
+
+\begin{document}
+
+\maketitle
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth,angle=-90]{graphs/sensor.jpg}
+	\caption{Custom made PAR Sensor}
+\end{figure}
+
+\section*{Background}
+For the next phase of the Biodiversity-Exploratories research project all climate stations on the experimental  plots will be equipped with Photosynthetic Active Radiation (PAR) sensors. As the commercially available sensors (e.g. LiCOR LI-190) are quite expensive, we are looking for an alternative. Therefore, we build PAR sensors @ AWF based on a prototype developed and tested by MPI Jena. The calibration of the PAR sensors as presented here had two objectives i) to test the variation between copies of the custom made PAR sensor (PAR-AWF), and ii) to compare the measurement to a calibrated reference.
+
+\section*{Method}
+The caluculation of the calibration factors is based on the aggregated 5 Minutes intervalls. We removed the first and last 30 minutes of the time series to avoid disturbances during the set-up of the devices. The calibration coefficients are calculated as the slope of the linear regression model with no intercept. For the analysis and fitting of the linear models all values $\le0.1$ mV were removed as we assume that this is below the sensitivity of the data logger.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{graphs/Installation.JPG}
+	\caption{Calibration setup of Sensors}
+\end{figure}
+
+
+
+
+%Import data
+
+
+
+
+
+
+
+
+
+
+
+
+
+% Add two hours as the logger clock was wrong
+
+% Define the reference
+
+
+
+
+
+
+% Remove additional columns
+
+
+
+
+
+
+
+% Remove columns where no sensor was connect to the logger from the log file
+
+
+%Set sensor_ids
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% Set timestamps
+
+
+
+%Remove two sensors which were not correctly connected
+
+
+
+
+
+
+
+
+% Combine all log files
+
+% Set teh refernce by averaging the two Licor sensors
+
+
+% Create list with all sensor_ids
+
+
+
+
+
+% Start calculation and report compilation for each sensor
+\pagebreak
+
+% Remove values smaller then 0.1
+
+\begin{center}
+\large{\textbf{SENSOR:001}}\\
+\end{center}
+
+\hrulefill\\
+CALIBRATION DATASET:\\
+\begin{table}[h!]
+  \centering
+  \label{tab:table1}
+  \begin{tabular}{ll}
+    Location: & Aboretum Goettingen\\ 
+    
+    
+    Start:  & Apr 27 09:39:30 2017 \\
+    End:   & Apr 28 08:51:30 2017\\ 
+    Duration: & 23 h\\
+    Measurement frequency: & 0.3hz\\
+    Averaging:  &5 min\\
+    Number of records: & 169 \\
+    References: & LiCOR Q52953, Li-COR Q 52953 \\
+  \end{tabular}
+\end{table}
+
+\hrulefill\\
+CALIBRATION RESULTS:\\
+% Define a linear model with the reference as dependent variable and no intersect
+
+
+\begin{center}
+\textbf{\large{Calibration Factor: 50.522}}\\
+\end{center}
+% latex table generated in R 3.6.3 by xtable 1.8-4 package
+% Tue Sep 22 13:59:49 2020
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & t value & Pr($>$$|$t$|$) \\ 
+  \hline
+AWF\_PAR\_001 & 50.5217 & 0.2976 & 169.75 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+
+
+\hrulefill\\
+QUALITY REPORT:\\
+Residual standard error: 59.19 PPFD\\
+Adjusted R-squared: 0.994
+
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\linewidth]{graphs/AWF_PAR_001_scatter.pdf}
+\end{figure}
+
+
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{graphs/AWF_PAR_001_pred.pdf}
+\end{figure}
+
+\pagebreak
+
+% Remove values smaller then 0.1
+
+\begin{center}
+\large{\textbf{SENSOR:002}}\\
+\end{center}
+
+\hrulefill\\
+CALIBRATION DATASET:\\
+\begin{table}[h!]
+  \centering
+  \label{tab:table1}
+  \begin{tabular}{ll}
+    Location: & Aboretum Goettingen\\ 
+    
+    
+    Start:  & Apr 27 09:39:30 2017 \\
+    End:   & Apr 28 08:51:30 2017\\ 
+    Duration: & 23 h\\
+    Measurement frequency: & 0.3hz\\
+    Averaging:  &5 min\\
+    Number of records: & 169 \\
+    References: & LiCOR Q52953, Li-COR Q 52953 \\
+  \end{tabular}
+\end{table}
+
+\hrulefill\\
+CALIBRATION RESULTS:\\
+% Define a linear model with the reference as dependent variable and no intersect
+
+
+\begin{center}
+\textbf{\large{Calibration Factor: 51.15}}\\
+\end{center}
+% latex table generated in R 3.6.3 by xtable 1.8-4 package
+% Tue Sep 22 13:59:50 2020
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & t value & Pr($>$$|$t$|$) \\ 
+  \hline
+AWF\_PAR\_002 & 51.1499 & 0.2689 & 190.22 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+
+
+\hrulefill\\
+QUALITY REPORT:\\
+Residual standard error: 52.85 PPFD\\
+Adjusted R-squared: 0.995
+
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\linewidth]{graphs/AWF_PAR_002_scatter.pdf}
+\end{figure}
+
+
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{graphs/AWF_PAR_002_pred.pdf}
+\end{figure}
+
+
+\end{document}
