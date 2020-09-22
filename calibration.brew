@@ -121,7 +121,7 @@ The caluculation of the calibration factors is based on the aggregated 5 Minutes
 <%sensor_ids<-sensor_ids[-which(sensor_ids%in%c('Licor.1','Licor.2'))]%>
 <%sensor_ids<-sort(sensor_ids)%>
 <%results<-list()%>
-<%sensor_ids<-sensor_ids[1:2]%>
+<%#sensor_ids<-sensor_ids[1:2]%>
 % Start calculation and report compilation for each sensor
 <%for (i in sensor_ids) { -%>
 \pagebreak
